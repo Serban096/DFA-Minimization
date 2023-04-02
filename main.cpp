@@ -8,7 +8,7 @@ int dfa(string a[100][100], int stareInitiala, int n, char litera)
 {
     int stareCurenta = stareInitiala;
 
-    for(int j=0; j<n + stareInitiala; j++)
+    for(int j=0; j<100; j++)
         if(a[stareCurenta][j].find(litera) != string:: npos){
                 stareCurenta = j;
                 return stareCurenta;
@@ -56,12 +56,10 @@ int main()
 
     }
 
-
-
     int ok = 1;
     while(ok){
         ok = 0;
-        for(int i=stareInitiala+1; i<n; i++)
+        for(int i=stareInitiala+1; i<stareInitiala + n; i++)
             for(int j=stareInitiala; j < i; j++)
                 for(int k=0; k<alfabet.length(); k++){
                     int i2 = dfa(a, i, n, alfabet[k]);
@@ -75,7 +73,7 @@ int main()
                     }
                 }
         }
-/*
+   /*
     for(int i=stareInitiala; i<stareInitiala+n; i++){
         for(int j=stareInitiala; j<stareInitiala+n; j++)
             cout<<e[i][j]<<" ";
