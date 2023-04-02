@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string.h>
 #include <vector>
+#include <algorithm>
 using namespace std;
 int vStari[100];
 int dfa(string a[100][100], int stareInitiala, int n, char litera)
@@ -19,11 +20,16 @@ int main()
 {
     ifstream f("date.in");
     ofstream g("date.out");
-    int n, stareInitiala, e[100][100];
+    int n, stareInitiala, e[100][100], nrFin, aux;
     f>>n;
     f>>stareInitiala;
-    string a[100][100], stariFinale, alfabet;
-    f>>stariFinale;
+    f>>nrFin;
+    string a[100][100], alfabet;
+    vector <int> stariFinale;
+    for(int i=0; i<nrFin; i++){
+        f>>aux;
+        stariFinale.push_back(aux);
+    }
     f>>alfabet;
 
     for(int i=0; i<100 ; i++)
@@ -49,9 +55,11 @@ int main()
         for(int j=stareInitiala; j<stareInitiala+n; j++){
             e[i][j] = 1;
             if(i != j){
-                if((stariFinale.find('0' + i) == string :: npos && stariFinale.find('0' + j) != string :: npos) ||
-                   (stariFinale.find('0' + i) != string :: npos && stariFinale.find('0' + j) == string :: npos))
-                    e[i][j] = 0;}
+                if((find(stariFinale.begin(), stariFinale.end(), i) != stariFinale.end() &&
+                    find(stariFinale.begin(), stariFinale.end(), j) == stariFinale.end()) ||
+                   (find(stariFinale.begin(), stariFinale.end(), j) != stariFinale.end() &&
+                    find(stariFinale.begin(), stariFinale.end(), i) == stariFinale.end()))
+                        e[i][j] = 0;}
             else e[i][j] = -1;
 
     }
@@ -84,14 +92,13 @@ int main()
     int n2=0;
     for(int j=stareInitiala; j<stareInitiala+n; j++){
         if(!vStari[j]){
-            string aux = ""; aux += ('0' + j);
-            stariNoi.push_back(aux);
+            stariNoi.push_back(to_string(j));
             n2++;
             vStari[j]++;
 
         for(int i=j+1; i<stareInitiala + n; i++)
             if(e[i][j] == 1){
-                stariNoi.back() += ('0' + i);
+                stariNoi.back() += (to_string(i));
                 vStari[i]++;
             }
         }
@@ -99,8 +106,8 @@ int main()
     g<<"Nr. stari: "<<n2<<endl<<"Stare initiala: "<<stariNoi.at(0)<<endl;
     g<<"Stari finale: ";
     for(int i=0; i<stariNoi.size(); i++)
-        for(int k=0; k<stariNoi.at(i).length(); k++)
-                if(stariFinale.find(stariNoi.at(i)[k]) != string::npos){
+        for(int k=0; k<stariFinale.size(); k++)
+                if(stariNoi.at(i).find(to_string(stariFinale.at(k))) != string::npos){
                     g<<stariNoi.at(i)<<" ";
                     break;
             }
@@ -111,8 +118,10 @@ int main()
         g<<stariNoi.at(i)<<" ";
         for(int j=0; j<alfabet.length(); j++){
             int x = dfa(a, (stariNoi.at(i)[0] - '0'), n, alfabet[j]);
+            if(x < 0)
+                x = dfa(a, stoi(stariNoi.at(i).substr(0, 2)), n, alfabet[j]);
             for(int k=0; k<stariNoi.size(); k++)
-                if(stariNoi.at(k).find('0' + x) != string::npos){
+                if(stariNoi.at(k).find(to_string(x)) != string::npos){
                     g<<stariNoi.at(k);
                     break;
             }
