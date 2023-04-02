@@ -75,13 +75,13 @@ int main()
                     }
                 }
         }
-
+/*
     for(int i=stareInitiala; i<stareInitiala+n; i++){
         for(int j=stareInitiala; j<stareInitiala+n; j++)
             cout<<e[i][j]<<" ";
         cout<<endl;
     }
-
+*/
     vector <string> stariNoi;
     int n2=0;
     for(int j=stareInitiala; j<stareInitiala+n; j++){
