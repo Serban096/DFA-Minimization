@@ -1,3 +1,3 @@
-# Minimizare AFD
+# DFA Minimization
 
-Transformarea unui AFD complet intr-un AFD minimal
+Minimization of a DFA implemented in C++
